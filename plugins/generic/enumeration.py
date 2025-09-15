@@ -548,7 +548,7 @@ class Enumeration:
                 count = inject.getValue(query, inband=False, expected="int", charsetType=2)
 
                 if not count.isdigit() or not len(count) or count == "0":
-                    if not count.isdigit() and kb.dbms == DBMS.ORACLE and not query2:
+                    if not (isinstance(count, basestring) and count.isdigit()) and kb.dbms == DBMS.ORACLE and not query2:
                         infoMsg = "trying with table USER_SYS_PRIVS"
                         logger.info(infoMsg)
 

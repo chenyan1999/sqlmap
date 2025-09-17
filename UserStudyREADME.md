@@ -5,9 +5,8 @@
 请通过以下命令配置环境，用于测试编辑结果：
 
 ```bash
-conda create --name env_3 python=3.XX -y
+conda create --name env_3 python=3.9 -y
 conda activate env_3
-pip install xxx
 ```
 
 ## 任务介绍
@@ -28,7 +27,10 @@ def isNumPosStrValue(count):
     return count and isinstance(count, basestring) and count.isdigit() and count != "0"
 ```
 
-请你在完成该初始修改后，完成该重构任务。
+请你在完成该初始修改后，完成该重构任务。请根据[验证修改](#验证修改)内的测试代码，验证任务是否完成。
+
+为了测试代码能够正常运行，我们注释、修改了一部分代码，可能导致 IDE 出现警告问题。请你忽视这些注释和警告，这些内容都与任务无关。
+
 
 > ⚠️ **温馨提示**
 >
@@ -55,13 +57,15 @@ fix for a bug reported by ToR: AttributeError: 'NoneType' object has no attribut
 请运行一下命令验证修改是否成功
 
 ```bash
-
+python -m test.run
 ```
 
 当修改正确时，你应该看到以下内容：
 
 ```bash
-
+Test 1 passed.
+Test 2 passed.
+Test 3 passed.
 ```
 
 恭喜你成功完成该任务，你可以告知实验负责人，停止录屏，整理需要提交的内容，并在**所有任务**完成后，打包提交。

@@ -17,14 +17,14 @@ import socket
 import string
 import sys
 import time
-import urlparse
+# import urlparse
 import ntpath
 import posixpath
 import subprocess
 
-from ConfigParser import DEFAULTSECT
-from ConfigParser import RawConfigParser
-from StringIO import StringIO
+# from ConfigParser import DEFAULTSECT
+# from ConfigParser import RawConfigParser
+# from StringIO import StringIO
 from difflib import SequenceMatcher
 from inspect import getmembers
 from subprocess import PIPE
@@ -35,45 +35,45 @@ from xml.etree import ElementTree as ET
 from xml.dom import minidom
 from xml.sax import parse
 
-from extra.cloak.cloak import decloak
-from lib.contrib import magic
-from lib.core.data import conf
-from lib.core.data import kb
-from lib.core.data import logger
-from lib.core.data import paths
-from lib.core.data import queries
-from lib.core.convert import htmlunescape
-from lib.core.convert import urlencode
+# from extra.cloak.cloak import decloak
+# from lib.contrib import magic
+# from lib.core.data import conf
+# from lib.core.data import kb
+# from lib.core.data import logger
+# from lib.core.data import paths
+# from lib.core.data import queries
+# from lib.core.convert import htmlunescape
+# from lib.core.convert import urlencode
 from lib.core.enums import DBMS
 from lib.core.enums import PLACE
-from lib.core.exception import sqlmapFilePathException
-from lib.core.exception import sqlmapGenericException
-from lib.core.exception import sqlmapNoneDataException
-from lib.core.exception import sqlmapMissingDependence
-from lib.core.exception import sqlmapSyntaxException
+# from lib.core.exception import sqlmapFilePathException
+# from lib.core.exception import sqlmapGenericException
+# from lib.core.exception import sqlmapNoneDataException
+# from lib.core.exception import sqlmapMissingDependence
+# from lib.core.exception import sqlmapSyntaxException
 from lib.core.optiondict import optDict
-from lib.core.settings import DESCRIPTION
-from lib.core.settings import IS_WIN
-from lib.core.settings import PLATFORM
-from lib.core.settings import SITE
-from lib.core.settings import SQL_STATEMENTS
-from lib.core.settings import SUPPORTED_DBMS
-from lib.core.settings import VERSION_STRING
-from lib.core.settings import MSSQL_ALIASES
-from lib.core.settings import MYSQL_ALIASES
-from lib.core.settings import PGSQL_ALIASES
-from lib.core.settings import ORACLE_ALIASES
-from lib.core.settings import SQLITE_ALIASES
-from lib.core.settings import ACCESS_ALIASES
-from lib.core.settings import FIREBIRD_ALIASES
-from lib.core.settings import DUMP_NEWLINE_MARKER
-from lib.core.settings import DUMP_CR_MARKER
-from lib.core.settings import DUMP_DEL_MARKER
-from lib.core.settings import DUMP_TAB_MARKER
-from lib.core.settings import DUMP_START_MARKER
-from lib.core.settings import DUMP_STOP_MARKER
+# from lib.core.settings import DESCRIPTION
+# from lib.core.settings import IS_WIN
+# from lib.core.settings import PLATFORM
+# from lib.core.settings import SITE
+# from lib.core.settings import SQL_STATEMENTS
+# from lib.core.settings import SUPPORTED_DBMS
+# from lib.core.settings import VERSION_STRING
+# from lib.core.settings import MSSQL_ALIASES
+# from lib.core.settings import MYSQL_ALIASES
+# from lib.core.settings import PGSQL_ALIASES
+# from lib.core.settings import ORACLE_ALIASES
+# from lib.core.settings import SQLITE_ALIASES
+# from lib.core.settings import ACCESS_ALIASES
+# from lib.core.settings import FIREBIRD_ALIASES
+# from lib.core.settings import DUMP_NEWLINE_MARKER
+# from lib.core.settings import DUMP_CR_MARKER
+# from lib.core.settings import DUMP_DEL_MARKER
+# from lib.core.settings import DUMP_TAB_MARKER
+# from lib.core.settings import DUMP_START_MARKER
+# from lib.core.settings import DUMP_STOP_MARKER
 
-class UnicodeRawConfigParser(RawConfigParser):
+class UnicodeRawConfigParser():
     """
     RawConfigParser with unicode writing support
     """
@@ -135,7 +135,7 @@ def paramToDict(place, parameters=None):
     if conf.parameters.has_key(place) and not parameters:
         parameters = conf.parameters[place]
 
-    if place is not "POSTxml":
+    if place != "POSTxml":
         parameters = parameters.replace(", ", ",")
 
         if place == PLACE.COOKIE:
@@ -417,11 +417,8 @@ def filePathToString(filePath):
 
 def dataToStdout(data, forceOutput=False):
     if forceOutput or conf.verbose > 0:
-        try:
-            sys.stdout.write(data)
-            sys.stdout.flush()
-        except UnicodeEncodeError:
-            print data.encode(conf.dataEncoding)
+        sys.stdout.write(data)
+        sys.stdout.flush()
 
 def dataToSessionFile(data):
     if not conf.sessionFile:
@@ -573,7 +570,7 @@ def checkFile(filename):
     """
 
     if not os.path.exists(filename):
-        raise sqlmapFilePathException, "unable to read file '%s'" % filename
+        raise sqlmapFilePathException("unable to read file '%s'" % filename)
 
 def replaceNewlineTabs(inpStr, stdout=False):
     if inpStr is None:
@@ -731,7 +728,7 @@ def parseTargetDirect():
         errMsg = "invalid target details, valid syntax is for instance "
         errMsg += "'mysql://USER:PASSWORD@DBMS_IP:DBMS_PORT/DATABASE_NAME' "
         errMsg += "or 'access://DATABASE_FILEPATH'"
-        raise sqlmapSyntaxException, errMsg
+        raise sqlmapSyntaxException(errMsg)
 
     dbmsDict = { DBMS.MSSQL: [MSSQL_ALIASES, "python-pymssql", "http://pymssql.sourceforge.net/"],
                  DBMS.MYSQL: [MYSQL_ALIASES, "python-mysqldb", "http://mysql-python.sourceforge.net/"],
@@ -754,7 +751,7 @@ def parseTargetDirect():
                         conf.port     = 0
                 elif not remote:
                         errMsg = "missing remote connection details"
-                        raise sqlmapSyntaxException, errMsg
+                        raise sqlmapSyntaxException(errMsg)
 
                 if dbmsName == DBMS.MSSQL:
                     import _mssql
@@ -764,7 +761,7 @@ def parseTargetDirect():
                         errMsg = "pymssql library on your system must be "
                         errMsg += "version 1.0.2 to work, get it from "
                         errMsg += "http://sourceforge.net/projects/pymssql/files/pymssql/1.0.2/"
-                        raise sqlmapMissingDependence, errMsg
+                        raise sqlmapMissingDependence(errMsg)
 
                 elif dbmsName == DBMS.MYSQL:
                     import MySQLdb
@@ -778,11 +775,11 @@ def parseTargetDirect():
                     import pyodbc
                 elif dbmsName == DBMS.FIREBIRD:
                     import kinterbasdb
-            except ImportError, _:
+            except ImportError as _:
                 errMsg  = "sqlmap requires '%s' third-party library " % data[1]
                 errMsg += "in order to directly connect to the database "
                 errMsg += "'%s'. Download from '%s'" % (dbmsName, data[2])
-                raise sqlmapMissingDependence, errMsg
+                raise sqlmapMissingDependence; errMsg
 
 def parseTargetUrl():
     """
@@ -810,7 +807,7 @@ def parseTargetUrl():
             conf.port = int(__hostnamePort[1])
         except:
             errMsg = "invalid target url"
-            raise sqlmapSyntaxException, errMsg
+            raise sqlmapSyntaxException; errMsg
     elif conf.scheme == "https":
         conf.port = 443
     else:
@@ -1094,7 +1091,7 @@ def safeStringFormat(formatStr, params):
                 if count < len(params):
                     retVal = retVal[:index] + getUnicode(params[count]) + retVal[index+2:]
                 else:
-                    raise sqlmapNoneDataException, "wrong number of parameters during string formatting"
+                    raise sqlmapNoneDataException; "wrong number of parameters during string formatting"
                 count += 1
 
     return retVal
@@ -1181,9 +1178,11 @@ def decloakToNamedTemporaryFile(filepath, name=None):
 
 def decloakToMkstemp(filepath, **kwargs):
     name = mkstemp(**kwargs)[1]
+
     retVal = open(name, 'w+b')
 
     retVal.write(decloak(filepath))
+
     retVal.seek(0)
 
     return retVal
@@ -1622,6 +1621,7 @@ def extractRegexResult(regex, content, flags=0):
     retVal = None
 
     if regex and content and '?P<result>' in regex:
+        
         match = re.search(regex, content, flags)
         if match:
             retVal = match.group("result")

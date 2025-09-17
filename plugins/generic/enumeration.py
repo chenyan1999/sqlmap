@@ -10,42 +10,38 @@ See the file 'doc/COPYING' for copying permission
 import re
 import time
 
-from lib.core.agent import agent
+# from lib.core.agent import agent
 from lib.core.common import dataToStdout
 from lib.core.common import getRange
 from lib.core.common import getCompiledRegex
-from lib.core.common import getConsoleWidth
-from lib.core.common import getFileItems
 from lib.core.common import getUnicode
 from lib.core.common import parsePasswordHash
 from lib.core.common import popValue
 from lib.core.common import pushValue
-from lib.core.common import randomStr
 from lib.core.common import readInput
-from lib.core.common import safeStringFormat
 from lib.core.common import strToHex
-from lib.core.convert import utf8decode
-from lib.core.data import conf
-from lib.core.data import kb
-from lib.core.data import logger
-from lib.core.data import paths
-from lib.core.data import queries
+# from lib.core.convert import utf8decode
+# from lib.core.data import conf
+# from lib.core.data import kb
+# from lib.core.data import logger
+# from lib.core.data import paths
+# from lib.core.data import queries
 from lib.core.enums import DBMS
-from lib.core.exception import sqlmapMissingMandatoryOptionException
-from lib.core.exception import sqlmapNoneDataException
-from lib.core.exception import sqlmapUnsupportedFeatureException
-from lib.core.exception import sqlmapUserQuitException
-from lib.core.session import setOs
-from lib.core.settings import SQL_STATEMENTS
-from lib.core.shell import autoCompletion
+# from lib.core.exception import sqlmapMissingMandatoryOptionException
+# from lib.core.exception import sqlmapNoneDataException
+# from lib.core.exception import sqlmapUnsupportedFeatureException
+# from lib.core.exception import sqlmapUserQuitException
+# from lib.core.session import setOs
+# from lib.core.settings import SQL_STATEMENTS
+# from lib.core.shell import autoCompletion
 from lib.core.unescaper import unescaper
-from lib.parse.banner import bannerParser
-from lib.request import inject
-from lib.request.connect import Connect as Request
-from lib.techniques.brute.use import columnExists
-from lib.techniques.brute.use import tableExists
-from lib.techniques.inband.union.test import unionTest
-from lib.utils.hash import dictionaryAttack
+# from lib.parse.banner import bannerParser
+# from lib.request import inject
+# from lib.request.connect import Connect as Request
+# from lib.techniques.brute.use import columnExists
+# from lib.techniques.brute.use import tableExists
+# from lib.techniques.inband.union.test import unionTest
+# from lib.utils.hash import dictionaryAttack
 
 class Enumeration:
     """
@@ -161,7 +157,7 @@ class Enumeration:
 
             if not count.isdigit() or not len(count) or count == "0":
                 errMsg = "unable to retrieve the number of database users"
-                raise sqlmapNoneDataException, errMsg
+                raise sqlmapNoneDataException; errMsg
 
             if kb.dbms == DBMS.ORACLE:
                 plusOne = True
@@ -183,7 +179,7 @@ class Enumeration:
 
         if not kb.data.cachedUsers:
             errMsg = "unable to retrieve the database users"
-            raise sqlmapNoneDataException, errMsg
+            raise sqlmapNoneDataException; errMsg
 
         return kb.data.cachedUsers
 
@@ -324,7 +320,7 @@ class Enumeration:
         if not kb.data.cachedUsersPasswords:
             errMsg  = "unable to retrieve the password "
             errMsg += "hashes for the database users"
-            raise sqlmapNoneDataException, errMsg
+            raise sqlmapNoneDataException; errMsg
 
         message = "do you want to use dictionary attack on retrieved password hashes? [Y/n/q]"
         test = readInput(message, default="Y")
@@ -643,7 +639,7 @@ class Enumeration:
         if not kb.data.cachedUsersPrivileges:
             errMsg  = "unable to retrieve the privileges "
             errMsg += "for the database users"
-            raise sqlmapNoneDataException, errMsg
+            raise sqlmapNoneDataException; errMsg
 
         return ( kb.data.cachedUsersPrivileges, areAdmins )
 
@@ -688,7 +684,7 @@ class Enumeration:
 
             if not count.isdigit() or not len(count) or count == "0":
                 errMsg = "unable to retrieve the number of databases"
-                raise sqlmapNoneDataException, errMsg
+                raise sqlmapNoneDataException; errMsg
 
             indexRange = getRange(count)
 
@@ -706,7 +702,7 @@ class Enumeration:
 
         if not kb.data.cachedDbs:
             errMsg = "unable to retrieve the database names"
-            raise sqlmapNoneDataException, errMsg
+            raise sqlmapNoneDataException; errMsg
 
         return kb.data.cachedDbs
 
@@ -847,7 +843,7 @@ class Enumeration:
 
         if not kb.data.cachedTables:
             errMsg = "unable to retrieve the tables for any database"
-            raise sqlmapNoneDataException, errMsg
+            raise sqlmapNoneDataException; errMsg
 
         return kb.data.cachedTables
 
@@ -879,7 +875,7 @@ class Enumeration:
 
         if not conf.tbl:
             errMsg = "missing table parameter"
-            raise sqlmapMissingMandatoryOptionException, errMsg
+            raise sqlmapMissingMandatoryOptionException; errMsg
 
         if "." in conf.tbl:
             conf.db, conf.tbl = conf.tbl.split(".")
@@ -986,7 +982,7 @@ class Enumeration:
                 errMsg  = "unable to retrieve the number of columns "
                 errMsg += "for table '%s' " % conf.tbl
                 errMsg += "on database '%s'" % conf.db
-                raise sqlmapNoneDataException, errMsg
+                raise sqlmapNoneDataException; errMsg
 
             table   = {}
             columns = {}
@@ -1046,14 +1042,14 @@ class Enumeration:
             errMsg  = "unable to retrieve the columns "
             errMsg += "for table '%s' " % conf.tbl
             errMsg += "on database '%s'" % conf.db
-            raise sqlmapNoneDataException, errMsg
+            raise sqlmapNoneDataException; errMsg
 
         return kb.data.cachedColumns
 
     def dumpTable(self):
         if not conf.tbl and not conf.col:
             errMsg = "missing table parameter"
-            raise sqlmapMissingMandatoryOptionException, errMsg
+            raise sqlmapMissingMandatoryOptionException; errMsg
 
         if conf.col and not conf.tbl:
             warnMsg = "missing table parameter. You only provided "
@@ -1091,7 +1087,7 @@ class Enumeration:
             if kb.dbms == DBMS.MYSQL and not kb.data.has_information_schema:
                 errMsg  = "information_schema not available, "
                 errMsg += "back-end DBMS is MySQL < 5.0"
-                raise sqlmapUnsupportedFeatureException, errMsg
+                raise sqlmapUnsupportedFeatureException; errMsg
 
             kb.data.cachedColumns = self.getColumns(onlyColNames=True)
 
@@ -1245,7 +1241,7 @@ class Enumeration:
         if kb.dbms == DBMS.MYSQL and not kb.data.has_information_schema:
             errMsg  = "information_schema not available, "
             errMsg += "back-end DBMS is MySQL < 5.0"
-            raise sqlmapUnsupportedFeatureException, errMsg
+            raise sqlmapUnsupportedFeatureException; errMsg
 
         conf.db              = None
         conf.tbl             = None
@@ -1428,7 +1424,7 @@ class Enumeration:
         if kb.dbms == DBMS.MYSQL and not kb.data.has_information_schema:
             errMsg  = "information_schema not available, "
             errMsg += "back-end DBMS is MySQL < 5.0"
-            raise sqlmapUnsupportedFeatureException, errMsg
+            raise sqlmapUnsupportedFeatureException; errMsg
 
         rootQuery = queries[kb.dbms].search_table
         foundTbls = {}
@@ -1549,7 +1545,7 @@ class Enumeration:
         if kb.dbms == DBMS.MYSQL and not kb.data.has_information_schema:
             errMsg  = "information_schema not available, "
             errMsg += "back-end DBMS is MySQL < 5.0"
-            raise sqlmapUnsupportedFeatureException, errMsg
+            raise sqlmapUnsupportedFeatureException; errMsg
 
         rootQuery = queries[kb.dbms].search_column
         foundCols = {}
@@ -1716,7 +1712,7 @@ class Enumeration:
         if not conf.db and not conf.tbl and not conf.col:
             errMsg = "missing parameter, provide -D, -T or -C together "
             errMsg += "with --search"
-            raise sqlmapMissingMandatoryOptionException, errMsg
+            raise sqlmapMissingMandatoryOptionException; errMsg
 
     def sqlQuery(self, query):
         output  = None

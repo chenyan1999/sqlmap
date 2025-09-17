@@ -73,7 +73,6 @@ def count() -> tuple:
     for match in file_name_matches:
         before_filename = match.group(1)
         after_filename = match.group(2)
-        print(f"File name: {before_filename} -> {after_filename}")
         try:
             assert before_filename == after_filename
         except:

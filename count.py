@@ -73,6 +73,7 @@ def count() -> tuple:
     for match in file_name_matches:
         before_filename = match.group(1)
         after_filename = match.group(2)
+        print(f"File name: {before_filename} -> {after_filename}")
         try:
             assert before_filename == after_filename
         except:
@@ -111,10 +112,12 @@ def count() -> tuple:
             if type(window) is dict:
                 print(f"At file: {file_name}")
                 for loc in window["before"]:
-                    print(bg_red(f"- {loc}"), end="")
+                    loc = loc.strip("\n")
+                    print(bg_red(f"- {loc}"), end="\n")
 
                 for loc in window["after"]:
-                    print(bg_green(f"+ {loc}"), end="")
+                    loc = loc.strip("\n")
+                    print(bg_green(f"+ {loc}"), end="\n")
                 print("\n"+"="*30)
                 cnt += 1
 

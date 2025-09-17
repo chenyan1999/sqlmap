@@ -24,7 +24,7 @@ Sqlmap 在 `plugins/generic/enumeration.py` 中多次使用 `if not count.isdigi
 ```python
 
 def isNumPosStrValue(count):
-    return count and isinstance(count, basestring) and count.isdigit() and count != "0"
+    return isinstance(count, str) and count.isdigit() and count != "0"
 ```
 
 请你在完成该初始修改后，完成该重构任务。请根据[验证修改](#验证修改)内的测试代码，验证任务是否完成。

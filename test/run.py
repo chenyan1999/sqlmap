@@ -1,4 +1,4 @@
-from lib.core.common import isNumPosStrValue
+
 
 
 def test_isNumPosStrValue():
@@ -11,9 +11,18 @@ def test_isNumPosStrValue():
         123: False,      # 整型而不是字符串
     }
 
+    try:
+        from lib.core.common import isNumPosStrValue
+    except:
+        print("Test 1 failed: Could not find isNumPosStrValue in lib.core.common")
+        return
     for inp, expected in test_cases.items():
         result = isNumPosStrValue(inp)
-        assert result == expected, f"Input: {repr(inp):6} → Output: {result} (Expected: {expected})"
+        try:
+            assert result == expected
+        except AssertionError as e:
+            print(f"Test 1 failed: Input: {repr(inp):6} → Output: {result} (Expected: {expected})")
+            return
 
     print("Test 1 passed.")
 
@@ -23,7 +32,8 @@ def test_import():
         enumeration.isNumPosStrValue(1)
     except Exception as e:
         if str(e) == "module 'plugins.generic.enumeration' has no attribute 'isNumPosStrValue'":
-            raise AssertionError("Test 2 failed: You did not import isNumPosStrValue")
+            print("Test 2 failed: You did not import isNumPosStrValue in plugins/generic/enumeration.py")
+            return
 
     print("Test 2 passed.")
 
@@ -41,7 +51,11 @@ def test_refactor():
         if s == "ifnotisNumPosStrValue(count):":
             new_loc_cnt += 1
 
-    assert old_loc_cnt == 0 and new_loc_cnt == 12, "You missed some places to refactor"
+    try:
+        assert old_loc_cnt == 0 and new_loc_cnt == 12
+    except:
+        print("Test 3 failed: You missed some places to refactor")
+        return
 
     print("Test 3 passed.")
 

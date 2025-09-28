@@ -47,7 +47,7 @@ def isNumPosStrValue(count):
 当你需要输入编辑描述时，你可以直接复制以下内容：
 
 ```bash
-fix for a bug reported by ToR: AttributeError: 'NoneType' object has no attribute 'isdigit'
+Refactor if conditions in enumeration.py into `isNumPosStrValue(count)` in common.py for simplicity and robustness
 ```
 
 如果你所在的实验组使用的后端模型是 Claude Code，你可以输入任意内容和 Claude Code 沟通。
@@ -68,4 +68,11 @@ Test 2 passed.
 Test 3 passed.
 ```
 
-恭喜你成功完成该任务，你可以告知实验负责人，停止录屏，整理需要提交的内容，并在**所有任务**完成后，打包提交。
+恭喜你成功完成该任务，请你：
+
+1. 点击右上角的保存按钮![](/images/save.png)，保存你的活动记录（保存为当前文件夹下的`flow-keeper-user-stats.txt`）
+2. 停止录屏
+3. 告知实验负责人
+
+在完成**所有任务后**，请打包每个任务的 `flow-keeper-user-stats.txt` 文件和 录屏文件，提交给实验负责人。
+

@@ -5,8 +5,8 @@
 请通过以下命令配置环境，用于测试编辑结果：
 
 ```bash
-conda create --name env_3 python=3.9 -y
-conda activate env_3
+conda create --name env_1 python=3.9 -y
+conda activate env_1
 ```
 
 ## 任务介绍
@@ -70,9 +70,9 @@ Test 3 passed.
 
 恭喜你成功完成该任务，请你：
 
-1. 点击右上角的保存按钮![](/images/save.png)，保存你的活动记录（保存为当前文件夹下的`flow-keeper-user-stats.txt`）
+1. 点击右上角的保存按钮![](/images/save.png)，保存你的活动记录（保存为当前文件夹下的`{用户id}-3-{你所在的组别}.json`，例如`a94c-3-A.json`）
 2. 停止录屏
 3. 告知实验负责人
 
-在完成**所有任务后**，请打包每个任务的 `flow-keeper-user-stats.txt` 文件和 录屏文件，提交给实验负责人。
+在完成**所有任务后**，请打包每个任务的 `{用户id}-3-{你所在的组别}.json` 文件和 录屏文件，提交给实验负责人。
 
